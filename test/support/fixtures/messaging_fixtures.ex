@@ -94,4 +94,27 @@ defmodule Fastsms.MessagingFixtures do
 
     api_configuration
   end
+
+  @doc """
+  Generate a unique contact_live phone_number.
+  """
+  def unique_contact_live_phone_number, do: "some phone_number#{System.unique_integer([:positive])}"
+
+  @doc """
+  Generate a contact_live.
+  """
+  def contact_live_fixture(attrs \\ %{}) do
+    {:ok, contact_live} =
+      attrs
+      |> Enum.into(%{
+        address: "some address",
+        email: "some email",
+        first_name: "some first_name",
+        last_name: "some last_name",
+        phone_number: unique_contact_live_phone_number()
+      })
+      |> Fastsms.Messaging.create_contact_live()
+
+    contact_live
+  end
 end

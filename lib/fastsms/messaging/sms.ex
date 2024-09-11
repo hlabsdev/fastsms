@@ -7,7 +7,9 @@ defmodule Fastsms.Messaging.SMS do
     field :status, :string
     field :sent_at, :utc_datetime
     field :dynamic_fields, :map
-    field :contact_id, :id
+#    field :contact_id, :id
+
+    belongs_to :contact, Messaging.Contact
 
     timestamps(type: :utc_datetime)
   end

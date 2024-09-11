@@ -485,4 +485,100 @@ defmodule Fastsms.Messaging do
   def change_api_configuration(%APIConfiguration{} = api_configuration, attrs \\ %{}) do
     APIConfiguration.changeset(api_configuration, attrs)
   end
+
+  alias Fastsms.Messaging.ContactLive
+
+  @doc """
+  Returns the list of contacts.
+
+  ## Examples
+
+      iex> list_contacts()
+      [%ContactLive{}, ...]
+
+  """
+  def list_contacts do
+    Repo.all(ContactLive)
+  end
+
+  @doc """
+  Gets a single contact_live.
+
+  Raises `Ecto.NoResultsError` if the Contact live does not exist.
+
+  ## Examples
+
+      iex> get_contact_live!(123)
+      %ContactLive{}
+
+      iex> get_contact_live!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_contact_live!(id), do: Repo.get!(ContactLive, id)
+
+  @doc """
+  Creates a contact_live.
+
+  ## Examples
+
+      iex> create_contact_live(%{field: value})
+      {:ok, %ContactLive{}}
+
+      iex> create_contact_live(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_contact_live(attrs \\ %{}) do
+    %ContactLive{}
+    |> ContactLive.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a contact_live.
+
+  ## Examples
+
+      iex> update_contact_live(contact_live, %{field: new_value})
+      {:ok, %ContactLive{}}
+
+      iex> update_contact_live(contact_live, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_contact_live(%ContactLive{} = contact_live, attrs) do
+    contact_live
+    |> ContactLive.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a contact_live.
+
+  ## Examples
+
+      iex> delete_contact_live(contact_live)
+      {:ok, %ContactLive{}}
+
+      iex> delete_contact_live(contact_live)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_contact_live(%ContactLive{} = contact_live) do
+    Repo.delete(contact_live)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking contact_live changes.
+
+  ## Examples
+
+      iex> change_contact_live(contact_live)
+      %Ecto.Changeset{data: %ContactLive{}}
+
+  """
+  def change_contact_live(%ContactLive{} = contact_live, attrs \\ %{}) do
+    ContactLive.changeset(contact_live, attrs)
+  end
 end

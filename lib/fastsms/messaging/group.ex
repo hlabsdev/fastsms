@@ -5,6 +5,9 @@ defmodule Fastsms.Messaging.Group do
   schema "groups" do
     field :name, :string
 
+    many_to_many :contacts, Messaging.Contact, join_through: "group_contacts"
+    has_many :scheduled_smses, Messaging.ScheduledSMS
+
     timestamps(type: :utc_datetime)
   end
 

@@ -4,8 +4,11 @@ defmodule Fastsms.Messaging.GroupContact do
 
   schema "group_contacts" do
 
-    field :group_id, :id
-    field :contact_id, :id
+#    field :group_id, :id
+#    field :contact_id, :id
+    belongs_to :group, Messaging.Group
+    belongs_to :contact, Messaging.Contact
+
 
     timestamps(type: :utc_datetime)
   end

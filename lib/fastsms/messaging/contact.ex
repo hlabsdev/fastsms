@@ -9,6 +9,9 @@ defmodule Fastsms.Messaging.Contact do
     field :last_name, :string
     field :phone_number, :string
 
+    many_to_many :groups, Messaging.Group, join_through: "group_contacts"
+    has_many :smses, Messaging.SMS
+
     timestamps(type: :utc_datetime)
   end
 
