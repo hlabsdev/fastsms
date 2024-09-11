@@ -178,4 +178,62 @@ defmodule Fastsms.MessagingTest do
       assert %Ecto.Changeset{} = Messaging.change_sms(sms)
     end
   end
+
+  describe "scheduled_smses" do
+    alias Fastsms.Messaging.ScheduledSMS
+
+    import Fastsms.MessagingFixtures
+
+    @invalid_attrs %{message: nil, scheduled_at: nil, recurrence: nil}
+
+    test "list_scheduled_smses/0 returns all scheduled_smses" do
+      scheduled_sms = scheduled_sms_fixture()
+      assert Messaging.list_scheduled_smses() == [scheduled_sms]
+    end
+
+    test "get_scheduled_sms!/1 returns the scheduled_sms with given id" do
+      scheduled_sms = scheduled_sms_fixture()
+      assert Messaging.get_scheduled_sms!(scheduled_sms.id) == scheduled_sms
+    end
+
+    test "create_scheduled_sms/1 with valid data creates a scheduled_sms" do
+      valid_attrs = %{message: "some message", scheduled_at: ~U[2024-09-10 05:12:00Z], recurrence: "some recurrence"}
+
+      assert {:ok, %ScheduledSMS{} = scheduled_sms} = Messaging.create_scheduled_sms(valid_attrs)
+      assert scheduled_sms.message == "some message"
+      assert scheduled_sms.scheduled_at == ~U[2024-09-10 05:12:00Z]
+      assert scheduled_sms.recurrence == "some recurrence"
+    end
+
+    test "create_scheduled_sms/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Messaging.create_scheduled_sms(@invalid_attrs)
+    end
+
+    test "update_scheduled_sms/2 with valid data updates the scheduled_sms" do
+      scheduled_sms = scheduled_sms_fixture()
+      update_attrs = %{message: "some updated message", scheduled_at: ~U[2024-09-11 05:12:00Z], recurrence: "some updated recurrence"}
+
+      assert {:ok, %ScheduledSMS{} = scheduled_sms} = Messaging.update_scheduled_sms(scheduled_sms, update_attrs)
+      assert scheduled_sms.message == "some updated message"
+      assert scheduled_sms.scheduled_at == ~U[2024-09-11 05:12:00Z]
+      assert scheduled_sms.recurrence == "some updated recurrence"
+    end
+
+    test "update_scheduled_sms/2 with invalid data returns error changeset" do
+      scheduled_sms = scheduled_sms_fixture()
+      assert {:error, %Ecto.Changeset{}} = Messaging.update_scheduled_sms(scheduled_sms, @invalid_attrs)
+      assert scheduled_sms == Messaging.get_scheduled_sms!(scheduled_sms.id)
+    end
+
+    test "delete_scheduled_sms/1 deletes the scheduled_sms" do
+      scheduled_sms = scheduled_sms_fixture()
+      assert {:ok, %ScheduledSMS{}} = Messaging.delete_scheduled_sms(scheduled_sms)
+      assert_raise Ecto.NoResultsError, fn -> Messaging.get_scheduled_sms!(scheduled_sms.id) end
+    end
+
+    test "change_scheduled_sms/1 returns a scheduled_sms changeset" do
+      scheduled_sms = scheduled_sms_fixture()
+      assert %Ecto.Changeset{} = Messaging.change_scheduled_sms(scheduled_sms)
+    end
+  end
 end

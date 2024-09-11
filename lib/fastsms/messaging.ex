@@ -293,4 +293,100 @@ defmodule Fastsms.Messaging do
   def change_sms(%SMS{} = sms, attrs \\ %{}) do
     SMS.changeset(sms, attrs)
   end
+
+  alias Fastsms.Messaging.ScheduledSMS
+
+  @doc """
+  Returns the list of scheduled_smses.
+
+  ## Examples
+
+      iex> list_scheduled_smses()
+      [%ScheduledSMS{}, ...]
+
+  """
+  def list_scheduled_smses do
+    Repo.all(ScheduledSMS)
+  end
+
+  @doc """
+  Gets a single scheduled_sms.
+
+  Raises `Ecto.NoResultsError` if the Scheduled sms does not exist.
+
+  ## Examples
+
+      iex> get_scheduled_sms!(123)
+      %ScheduledSMS{}
+
+      iex> get_scheduled_sms!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_scheduled_sms!(id), do: Repo.get!(ScheduledSMS, id)
+
+  @doc """
+  Creates a scheduled_sms.
+
+  ## Examples
+
+      iex> create_scheduled_sms(%{field: value})
+      {:ok, %ScheduledSMS{}}
+
+      iex> create_scheduled_sms(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_scheduled_sms(attrs \\ %{}) do
+    %ScheduledSMS{}
+    |> ScheduledSMS.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a scheduled_sms.
+
+  ## Examples
+
+      iex> update_scheduled_sms(scheduled_sms, %{field: new_value})
+      {:ok, %ScheduledSMS{}}
+
+      iex> update_scheduled_sms(scheduled_sms, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_scheduled_sms(%ScheduledSMS{} = scheduled_sms, attrs) do
+    scheduled_sms
+    |> ScheduledSMS.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a scheduled_sms.
+
+  ## Examples
+
+      iex> delete_scheduled_sms(scheduled_sms)
+      {:ok, %ScheduledSMS{}}
+
+      iex> delete_scheduled_sms(scheduled_sms)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_scheduled_sms(%ScheduledSMS{} = scheduled_sms) do
+    Repo.delete(scheduled_sms)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking scheduled_sms changes.
+
+  ## Examples
+
+      iex> change_scheduled_sms(scheduled_sms)
+      %Ecto.Changeset{data: %ScheduledSMS{}}
+
+  """
+  def change_scheduled_sms(%ScheduledSMS{} = scheduled_sms, attrs \\ %{}) do
+    ScheduledSMS.changeset(scheduled_sms, attrs)
+  end
 end

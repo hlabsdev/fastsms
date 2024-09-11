@@ -62,4 +62,20 @@ defmodule Fastsms.MessagingFixtures do
 
     sms
   end
+
+  @doc """
+  Generate a scheduled_sms.
+  """
+  def scheduled_sms_fixture(attrs \\ %{}) do
+    {:ok, scheduled_sms} =
+      attrs
+      |> Enum.into(%{
+        message: "some message",
+        recurrence: "some recurrence",
+        scheduled_at: ~U[2024-09-10 05:12:00Z]
+      })
+      |> Fastsms.Messaging.create_scheduled_sms()
+
+    scheduled_sms
+  end
 end
