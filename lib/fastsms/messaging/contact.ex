@@ -20,6 +20,8 @@ defmodule Fastsms.Messaging.Contact do
     contact
     |> cast(attrs, [:first_name, :last_name, :phone_number, :email, :address])
     |> validate_required([:first_name, :last_name, :phone_number, :email, :address])
+    |> validate_format(:phone_number, ~r/^\+?[\d\s\-\(\)]{7,20}$/)
+#    |> validate_phone_number(:phone_number)
     |> unique_constraint(:phone_number)
 #    |> maybe_put_groups(attrs)
 #    |> maybe_put_smses(attrs)

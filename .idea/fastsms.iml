@@ -150,5 +150,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="ecto_phone_number" level="project" />
   </component>
 </module>
