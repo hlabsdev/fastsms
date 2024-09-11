@@ -14,9 +14,7 @@ defmodule FastsmsWeb.GroupLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:group, group)
-#     |> assign(:contacts, group.contacts)}
-     |> assign(:contacts, Messaging.list_contacts())}
+     |> assign(:group, group)}
   end
 
   defp page_title(:show), do: "Show Group"

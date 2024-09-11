@@ -20,24 +20,19 @@ defmodule Fastsms.Messaging.Contact do
   def changeset(contact, attrs) do
     contact
     |> Repo.preload(:groups)
+    |> Repo.preload(:smses)
     |> cast(attrs, [:first_name, :last_name, :phone_number, :email, :address])
     |> validate_required([:first_name, :last_name, :phone_number, :email, :address])
     |> validate_format(:phone_number, ~r/^\+?[\d\s\-\(\)]{7,20}$/)
-#    |> validate_phone_number(:phone_number)
     |> unique_constraint(:phone_number)
-#    |> maybe_put_groups(attrs)
-#    |> maybe_put_smses(attrs)
+    |> maybe_put_groups(attrs)
+    |> maybe_put_smses(attrs)
   end
 
   defp maybe_put_groups(changeset, %{"group_ids" => group_ids}) when is_list(group_ids) do
     groups = Fastsms.Messaging.list_groups(group_ids)
     put_assoc(changeset, :groups, groups)
   end
-
-#  defp maybe_put_groups(changeset, %{"group_ids" => group_ids}) when is_list(group_ids) do
-#    Repo.all(Fastsms.Messaging.Group, id: group_ids)
-#    |> put_assoc(changeset, :groups)
-#  end
 
   defp maybe_put_groups(changeset, _), do: changeset
 
