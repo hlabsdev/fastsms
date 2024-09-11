@@ -118,4 +118,64 @@ defmodule Fastsms.MessagingTest do
       assert %Ecto.Changeset{} = Messaging.change_group(group)
     end
   end
+
+  describe "smses" do
+    alias Fastsms.Messaging.SMS
+
+    import Fastsms.MessagingFixtures
+
+    @invalid_attrs %{message: nil, status: nil, sent_at: nil, dynamic_fields: nil}
+
+    test "list_smses/0 returns all smses" do
+      sms = sms_fixture()
+      assert Messaging.list_smses() == [sms]
+    end
+
+    test "get_sms!/1 returns the sms with given id" do
+      sms = sms_fixture()
+      assert Messaging.get_sms!(sms.id) == sms
+    end
+
+    test "create_sms/1 with valid data creates a sms" do
+      valid_attrs = %{message: "some message", status: "some status", sent_at: ~U[2024-09-10 05:10:00Z], dynamic_fields: %{}}
+
+      assert {:ok, %SMS{} = sms} = Messaging.create_sms(valid_attrs)
+      assert sms.message == "some message"
+      assert sms.status == "some status"
+      assert sms.sent_at == ~U[2024-09-10 05:10:00Z]
+      assert sms.dynamic_fields == %{}
+    end
+
+    test "create_sms/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Messaging.create_sms(@invalid_attrs)
+    end
+
+    test "update_sms/2 with valid data updates the sms" do
+      sms = sms_fixture()
+      update_attrs = %{message: "some updated message", status: "some updated status", sent_at: ~U[2024-09-11 05:10:00Z], dynamic_fields: %{}}
+
+      assert {:ok, %SMS{} = sms} = Messaging.update_sms(sms, update_attrs)
+      assert sms.message == "some updated message"
+      assert sms.status == "some updated status"
+      assert sms.sent_at == ~U[2024-09-11 05:10:00Z]
+      assert sms.dynamic_fields == %{}
+    end
+
+    test "update_sms/2 with invalid data returns error changeset" do
+      sms = sms_fixture()
+      assert {:error, %Ecto.Changeset{}} = Messaging.update_sms(sms, @invalid_attrs)
+      assert sms == Messaging.get_sms!(sms.id)
+    end
+
+    test "delete_sms/1 deletes the sms" do
+      sms = sms_fixture()
+      assert {:ok, %SMS{}} = Messaging.delete_sms(sms)
+      assert_raise Ecto.NoResultsError, fn -> Messaging.get_sms!(sms.id) end
+    end
+
+    test "change_sms/1 returns a sms changeset" do
+      sms = sms_fixture()
+      assert %Ecto.Changeset{} = Messaging.change_sms(sms)
+    end
+  end
 end

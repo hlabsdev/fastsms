@@ -45,4 +45,21 @@ defmodule Fastsms.MessagingFixtures do
 
     group
   end
+
+  @doc """
+  Generate a sms.
+  """
+  def sms_fixture(attrs \\ %{}) do
+    {:ok, sms} =
+      attrs
+      |> Enum.into(%{
+        dynamic_fields: %{},
+        message: "some message",
+        sent_at: ~U[2024-09-10 05:10:00Z],
+        status: "some status"
+      })
+      |> Fastsms.Messaging.create_sms()
+
+    sms
+  end
 end
