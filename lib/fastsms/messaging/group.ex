@@ -18,6 +18,7 @@ defmodule Fastsms.Messaging.Group do
   def changeset(group, attrs) do
     group
     |> Repo.preload(:contacts)  # Assurez-vous que l'association contacts est chargée
+    |> Repo.preload(:scheduled_smses)
     |> cast(attrs, [:name])
     |> validate_required([:name])
     |> unique_constraint(:name)

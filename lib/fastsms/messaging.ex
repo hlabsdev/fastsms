@@ -39,7 +39,11 @@ defmodule Fastsms.Messaging do
       ** (Ecto.NoResultsError)
 
   """
-  def get_contact!(id), do: Repo.get!(Contact, id)
+  def get_contact!(id) do
+    Repo.get!(Contact, id)
+    |> Repo.preload(:groups)
+    |> Repo.preload(:smses)
+  end
 
   @doc """
   Creates a contact.
@@ -142,6 +146,7 @@ defmodule Fastsms.Messaging do
     Group
     |> Repo.get!(id)
     |> Repo.preload(:contacts)  # Précharge les contacts
+    |> Repo.preload(:scheduled_smses)
   end
 
   @doc """
@@ -299,7 +304,10 @@ defmodule Fastsms.Messaging do
       ** (Ecto.NoResultsError)
 
   """
-  def get_sms!(id), do: Repo.get!(SMS, id)
+  def get_sms!(id) do
+    Repo.get!(SMS, id)
+    |> Repo.preload(:contact)
+  end
 
   @doc """
   Creates a sms.
@@ -395,7 +403,11 @@ defmodule Fastsms.Messaging do
       ** (Ecto.NoResultsError)
 
   """
-  def get_scheduled_sms!(id), do: Repo.get!(ScheduledSMS, id)
+  def get_scheduled_sms!(id) do
+    Repo.get!(ScheduledSMS, id)
+    |> Repo.preload(:contact)
+    |> Repo.preload(:group)
+  end
 
   @doc """
   Creates a scheduled_sms.
@@ -587,7 +599,11 @@ defmodule Fastsms.Messaging do
       ** (Ecto.NoResultsError)
 
   """
-  def get_group_contact!(id), do: Repo.get!(GroupContact, id)
+  def get_group_contact!(id) do
+    Repo.get!(GroupContact, id)
+    |> Repo.preload(:group)
+    |> Repo.preload(:contact)
+  end
 
   @doc """
   Creates a group_contact.

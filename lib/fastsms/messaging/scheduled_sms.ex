@@ -1,4 +1,5 @@
 defmodule Fastsms.Messaging.ScheduledSMS do
+  alias Fastsms.Repo
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -9,8 +10,8 @@ defmodule Fastsms.Messaging.ScheduledSMS do
 #    field :contact_id, :id
 #    field :group_id, :id
 
-    belongs_to :contact, Messaging.Contact
-    belongs_to :group, Messaging.Group
+    belongs_to :contact, Fastsms.Messaging.Contact
+    belongs_to :group, Fastsms.Messaging.Group
 
     timestamps(type: :utc_datetime)
   end
@@ -18,6 +19,8 @@ defmodule Fastsms.Messaging.ScheduledSMS do
   @doc false
   def changeset(scheduled_sms, attrs) do
     scheduled_sms
+    |> Repo.preload(:contact)
+    |> Repo.preload(:group)
     |> cast(attrs, [:message, :scheduled_at, :recurrence])
     |> validate_required([:message, :scheduled_at, :recurrence])
   end

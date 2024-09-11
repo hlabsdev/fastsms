@@ -1,6 +1,6 @@
 <.header>
-  Group <%= @group.id %>
-  <:subtitle>This is a group record from your database.</:subtitle>
+  Group <%= @group.id %>: <%= @group.name %>
+  <:subtitle>Ce groupe contient <%= length(@group.contacts)%> contacts. </:subtitle>
   <:actions>
     <.link patch={~p"/groups/#{@group}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit group</.button>
@@ -8,10 +8,16 @@
   </:actions>
 </.header>
 
-<.list>
-  <:item title="Name"><%= @group.name %></:item>
-</.list>
-
+<h3>Contacts du groupe</h3>
+<.table id="contacts" rows={Enum.uniq_by(@group.contacts, & &1.id)} row_click={&JS.navigate(~p"/contacts/#{&1}")}>
+  <:col :let={contact} label="First name"><%= contact.first_name %></:col>
+  <:col :let={contact} label="Last name"><%= contact.last_name %></:col>
+  <:col :let={contact} label="Phone"><%= contact.phone_number %></:col>
+  <:col :let={contact} label="Email"><%= contact.email %></:col>
+  <%!-- <:action :let={contact}>
+    <.link href={~p"/groups/#{@group}/remove_contact/#{contact}"} data-confirm="Are you sure?">Remove</.link>
+  </:action> --%>
+</.table>
 <.back navigate={~p"/groups"}>Back to groups</.back>
 
 <.modal :if={@live_action == :edit} id="group-modal" show on_cancel={JS.patch(~p"/groups/#{@group}")}>
