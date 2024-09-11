@@ -21,6 +21,10 @@ defmodule Fastsms.Messaging do
     Repo.all(Contact)
   end
 
+  def list_contacts(contact_ids) when is_list(contact_ids) do
+    Repo.all(Contact, id: contact_ids)
+  end
+
   @doc """
   Gets a single contact.
 
@@ -134,7 +138,11 @@ defmodule Fastsms.Messaging do
       ** (Ecto.NoResultsError)
 
   """
-  def get_group!(id), do: Repo.get!(Group, id)
+  def get_group!(id) do
+    Group
+    |> Repo.get!(id)
+    |> Repo.preload(:contacts)  # Précharge les contacts
+  end
 
   @doc """
   Creates a group.
@@ -201,6 +209,67 @@ defmodule Fastsms.Messaging do
     Group.changeset(group, attrs)
   end
 
+  alias Fastsms.Messaging.GroupContact
+
+  def add_contacts_to_group(group_id, contact_ids) do
+    contacts = Enum.map(contact_ids, fn contact_id ->
+      %{
+        group_id: group_id,
+        contact_id: String.to_integer(contact_id),
+#        inserted_at: DateTime.utc_now(),
+#        updated_at: DateTime.utc_now()
+      }
+    end)
+    Repo.insert_all(GroupContact, contacts)
+#    contact_ids
+#    |> Enum.map(&%GroupContact{group_id: group_id, contact_id: &1})
+#    |> Repo.insert_all(GroupContact)
+  end
+
+  def remove_contacts_from_group(group_id, contact_ids) do
+    from(gc in GroupContact, where: gc.group_id == ^group_id and gc.contact_id in ^contact_ids)
+    |> Repo.delete_all()
+  end
+
+  def create_group_with_contacts(attrs, contact_ids) do
+    Repo.transaction(fn ->
+      {:ok, group} = create_group(attrs)
+      add_contacts_to_group(group.id, contact_ids)
+      group
+    end)
+  end
+
+  # Method qui enleve tout peut importe si c'est ancien ou pas (Pas optimale)
+#  def update_group_with_contact(group_id, new_contact_ids) do
+#    Repo.transaction(fn ->
+#      # Remove existing contacts
+#      from(gc in GroupContact, where: gc.group_id == ^group_id)
+#      |> Repo.delete_all()
+#
+#      # Add new contacts
+#      add_contacts_to_group(group_id, new_contact_ids)
+#    end)
+#  end
+
+  # This check the existing contacts before the operation
+  def update_group_with_contact(group_id, new_contact_ids) do
+    Repo.transaction(fn ->
+      # Fetch existing contacts
+      existing_contacts = from(gc in GroupContact, where: gc.group_id == ^group_id, select: gc.contact_id)
+                          |> Repo.all()
+
+      # Determine contacts to remove and add
+      contacts_to_remove = existing_contacts -- new_contact_ids
+      contacts_to_add = new_contact_ids -- existing_contacts
+
+
+      # Remove contacts using the existing function
+      remove_contacts_from_group(group_id, contacts_to_remove)
+
+      # Add new contacts
+      add_contacts_to_group(group_id, contacts_to_add)
+    end)
+  end
   alias Fastsms.Messaging.SMS
 
   @doc """
@@ -487,5 +556,101 @@ defmodule Fastsms.Messaging do
   """
   def change_api_configuration(%APIConfiguration{} = api_configuration, attrs \\ %{}) do
     APIConfiguration.changeset(api_configuration, attrs)
+  end
+
+  alias Fastsms.Messaging.GroupContact
+
+  @doc """
+  Returns the list of group_contacts.
+
+  ## Examples
+
+      iex> list_group_contacts()
+      [%GroupContact{}, ...]
+
+  """
+  def list_group_contacts do
+    Repo.all(GroupContact)
+  end
+
+  @doc """
+  Gets a single group_contact.
+
+  Raises `Ecto.NoResultsError` if the Group contact does not exist.
+
+  ## Examples
+
+      iex> get_group_contact!(123)
+      %GroupContact{}
+
+      iex> get_group_contact!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_group_contact!(id), do: Repo.get!(GroupContact, id)
+
+  @doc """
+  Creates a group_contact.
+
+  ## Examples
+
+      iex> create_group_contact(%{field: value})
+      {:ok, %GroupContact{}}
+
+      iex> create_group_contact(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_group_contact(attrs \\ %{}) do
+    %GroupContact{}
+    |> GroupContact.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a group_contact.
+
+  ## Examples
+
+      iex> update_group_contact(group_contact, %{field: new_value})
+      {:ok, %GroupContact{}}
+
+      iex> update_group_contact(group_contact, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_group_contact(%GroupContact{} = group_contact, attrs) do
+    group_contact
+    |> GroupContact.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a group_contact.
+
+  ## Examples
+
+      iex> delete_group_contact(group_contact)
+      {:ok, %GroupContact{}}
+
+      iex> delete_group_contact(group_contact)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_group_contact(%GroupContact{} = group_contact) do
+    Repo.delete(group_contact)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking group_contact changes.
+
+  ## Examples
+
+      iex> change_group_contact(group_contact)
+      %Ecto.Changeset{data: %GroupContact{}}
+
+  """
+  def change_group_contact(%GroupContact{} = group_contact, attrs \\ %{}) do
+    GroupContact.changeset(group_contact, attrs)
   end
 end

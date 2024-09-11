@@ -1,4 +1,5 @@
 defmodule Fastsms.Messaging.Contact do
+  alias Fastsms.Repo
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -18,6 +19,7 @@ defmodule Fastsms.Messaging.Contact do
   @doc false
   def changeset(contact, attrs) do
     contact
+    |> Repo.preload(:groups)
     |> cast(attrs, [:first_name, :last_name, :phone_number, :email, :address])
     |> validate_required([:first_name, :last_name, :phone_number, :email, :address])
     |> validate_format(:phone_number, ~r/^\+?[\d\s\-\(\)]{7,20}$/)

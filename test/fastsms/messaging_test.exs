@@ -418,4 +418,56 @@ defmodule Fastsms.MessagingTest do
       assert %Ecto.Changeset{} = Messaging.change_contact(contact)
     end
   end
+
+  describe "group_contacts" do
+    alias Fastsms.Messaging.GroupContact
+
+    import Fastsms.MessagingFixtures
+
+    @invalid_attrs %{}
+
+    test "list_group_contacts/0 returns all group_contacts" do
+      group_contact = group_contact_fixture()
+      assert Messaging.list_group_contacts() == [group_contact]
+    end
+
+    test "get_group_contact!/1 returns the group_contact with given id" do
+      group_contact = group_contact_fixture()
+      assert Messaging.get_group_contact!(group_contact.id) == group_contact
+    end
+
+    test "create_group_contact/1 with valid data creates a group_contact" do
+      valid_attrs = %{}
+
+      assert {:ok, %GroupContact{} = group_contact} = Messaging.create_group_contact(valid_attrs)
+    end
+
+    test "create_group_contact/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Messaging.create_group_contact(@invalid_attrs)
+    end
+
+    test "update_group_contact/2 with valid data updates the group_contact" do
+      group_contact = group_contact_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %GroupContact{} = group_contact} = Messaging.update_group_contact(group_contact, update_attrs)
+    end
+
+    test "update_group_contact/2 with invalid data returns error changeset" do
+      group_contact = group_contact_fixture()
+      assert {:error, %Ecto.Changeset{}} = Messaging.update_group_contact(group_contact, @invalid_attrs)
+      assert group_contact == Messaging.get_group_contact!(group_contact.id)
+    end
+
+    test "delete_group_contact/1 deletes the group_contact" do
+      group_contact = group_contact_fixture()
+      assert {:ok, %GroupContact{}} = Messaging.delete_group_contact(group_contact)
+      assert_raise Ecto.NoResultsError, fn -> Messaging.get_group_contact!(group_contact.id) end
+    end
+
+    test "change_group_contact/1 returns a group_contact changeset" do
+      group_contact = group_contact_fixture()
+      assert %Ecto.Changeset{} = Messaging.change_group_contact(group_contact)
+    end
+  end
 end

@@ -6,7 +6,19 @@ defmodule FastsmsWeb.GroupLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :groups, Messaging.list_groups())}
+    # {:ok, stream(socket, :groups, list_groups(), :contacts, list_contacts())}
+     {:ok,
+      socket
+      |> stream(:groups, list_groups())
+      |> stream(:contacts, list_contacts())}
+  end
+
+  defp list_groups do
+    Messaging.list_groups()
+  end
+
+  defp list_contacts do
+    Messaging.list_contacts()
   end
 
   @impl true
@@ -18,12 +30,14 @@ defmodule FastsmsWeb.GroupLive.Index do
     socket
     |> assign(:page_title, "Edit Group")
     |> assign(:group, Messaging.get_group!(id))
+    |> assign(:contacts, list_contacts())
   end
 
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Group")
     |> assign(:group, %Group{})
+    |> assign(:contacts, list_contacts())
   end
 
   defp apply_action(socket, :index, _params) do

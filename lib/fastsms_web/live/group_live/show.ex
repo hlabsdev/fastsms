@@ -10,10 +10,13 @@ defmodule FastsmsWeb.GroupLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
+    group = Messaging.get_group!(id)
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:group, Messaging.get_group!(id))}
+     |> assign(:group, group)
+#     |> assign(:contacts, group.contacts)}
+     |> assign(:contacts, Messaging.list_contacts())}
   end
 
   defp page_title(:show), do: "Show Group"

@@ -94,4 +94,18 @@ defmodule Fastsms.MessagingFixtures do
 
     api_configuration
   end
+
+  @doc """
+  Generate a group_contact.
+  """
+  def group_contact_fixture(attrs \\ %{}) do
+    {:ok, group_contact} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> Fastsms.Messaging.create_group_contact()
+
+    group_contact
+  end
 end

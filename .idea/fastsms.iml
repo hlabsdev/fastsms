@@ -143,13 +143,13 @@
     <orderEntry type="library" name="mox" level="project" />
     <orderEntry type="library" name="hpack" level="project" />
     <orderEntry type="library" name="mimic" level="project" />
+    <orderEntry type="library" name="ecto_phone_number" level="project" />
     <orderEntry type="module-library">
-      <library name="Elixir at C:/Program Files/Elixir">
+      <library name="Elixir at C:\Program Files\Elixir">
         <CLASSES />
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="ecto_phone_number" level="project" />
   </component>
 </module>
