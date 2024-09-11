@@ -23,9 +23,15 @@ defmodule FastsmsWeb.Router do
     live "/contacts", ContactLive.Index, :index
     live "/contacts/new", ContactLive.Index, :new
     live "/contacts/:id/edit", ContactLive.Index, :edit
-
     live "/contacts/:id", ContactLive.Show, :show
     live "/contacts/:id/show/edit", ContactLive.Show, :edit
+
+    # Gestion des groupes
+    live "/groups", GroupLive.Index, :index
+    live "/groups/new", GroupLive.Index, :new
+    live "/groups/:id/edit", GroupLive.Index, :edit
+    live "/groups/:id", GroupLive.Show, :show
+    live "/groups/:id/show/edit", GroupLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
