@@ -26,4 +26,23 @@ defmodule Fastsms.MessagingFixtures do
 
     contact
   end
+
+  @doc """
+  Generate a unique group name.
+  """
+  def unique_group_name, do: "some name#{System.unique_integer([:positive])}"
+
+  @doc """
+  Generate a group.
+  """
+  def group_fixture(attrs \\ %{}) do
+    {:ok, group} =
+      attrs
+      |> Enum.into(%{
+        name: unique_group_name()
+      })
+      |> Fastsms.Messaging.create_group()
+
+    group
+  end
 end
