@@ -78,4 +78,20 @@ defmodule Fastsms.MessagingFixtures do
 
     scheduled_sms
   end
+
+  @doc """
+  Generate a api_configuration.
+  """
+  def api_configuration_fixture(attrs \\ %{}) do
+    {:ok, api_configuration} =
+      attrs
+      |> Enum.into(%{
+        api_key: "some api_key",
+        api_name: "some api_name",
+        default: true
+      })
+      |> Fastsms.Messaging.create_api_configuration()
+
+    api_configuration
+  end
 end

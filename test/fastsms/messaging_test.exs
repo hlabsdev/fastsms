@@ -236,4 +236,62 @@ defmodule Fastsms.MessagingTest do
       assert %Ecto.Changeset{} = Messaging.change_scheduled_sms(scheduled_sms)
     end
   end
+
+  describe "api_configurations" do
+    alias Fastsms.Messaging.APIConfiguration
+
+    import Fastsms.MessagingFixtures
+
+    @invalid_attrs %{default: nil, api_key: nil, api_name: nil}
+
+    test "list_api_configurations/0 returns all api_configurations" do
+      api_configuration = api_configuration_fixture()
+      assert Messaging.list_api_configurations() == [api_configuration]
+    end
+
+    test "get_api_configuration!/1 returns the api_configuration with given id" do
+      api_configuration = api_configuration_fixture()
+      assert Messaging.get_api_configuration!(api_configuration.id) == api_configuration
+    end
+
+    test "create_api_configuration/1 with valid data creates a api_configuration" do
+      valid_attrs = %{default: true, api_key: "some api_key", api_name: "some api_name"}
+
+      assert {:ok, %APIConfiguration{} = api_configuration} = Messaging.create_api_configuration(valid_attrs)
+      assert api_configuration.default == true
+      assert api_configuration.api_key == "some api_key"
+      assert api_configuration.api_name == "some api_name"
+    end
+
+    test "create_api_configuration/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Messaging.create_api_configuration(@invalid_attrs)
+    end
+
+    test "update_api_configuration/2 with valid data updates the api_configuration" do
+      api_configuration = api_configuration_fixture()
+      update_attrs = %{default: false, api_key: "some updated api_key", api_name: "some updated api_name"}
+
+      assert {:ok, %APIConfiguration{} = api_configuration} = Messaging.update_api_configuration(api_configuration, update_attrs)
+      assert api_configuration.default == false
+      assert api_configuration.api_key == "some updated api_key"
+      assert api_configuration.api_name == "some updated api_name"
+    end
+
+    test "update_api_configuration/2 with invalid data returns error changeset" do
+      api_configuration = api_configuration_fixture()
+      assert {:error, %Ecto.Changeset{}} = Messaging.update_api_configuration(api_configuration, @invalid_attrs)
+      assert api_configuration == Messaging.get_api_configuration!(api_configuration.id)
+    end
+
+    test "delete_api_configuration/1 deletes the api_configuration" do
+      api_configuration = api_configuration_fixture()
+      assert {:ok, %APIConfiguration{}} = Messaging.delete_api_configuration(api_configuration)
+      assert_raise Ecto.NoResultsError, fn -> Messaging.get_api_configuration!(api_configuration.id) end
+    end
+
+    test "change_api_configuration/1 returns a api_configuration changeset" do
+      api_configuration = api_configuration_fixture()
+      assert %Ecto.Changeset{} = Messaging.change_api_configuration(api_configuration)
+    end
+  end
 end

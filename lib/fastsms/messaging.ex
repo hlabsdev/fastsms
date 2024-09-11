@@ -389,4 +389,100 @@ defmodule Fastsms.Messaging do
   def change_scheduled_sms(%ScheduledSMS{} = scheduled_sms, attrs \\ %{}) do
     ScheduledSMS.changeset(scheduled_sms, attrs)
   end
+
+  alias Fastsms.Messaging.APIConfiguration
+
+  @doc """
+  Returns the list of api_configurations.
+
+  ## Examples
+
+      iex> list_api_configurations()
+      [%APIConfiguration{}, ...]
+
+  """
+  def list_api_configurations do
+    Repo.all(APIConfiguration)
+  end
+
+  @doc """
+  Gets a single api_configuration.
+
+  Raises `Ecto.NoResultsError` if the Api configuration does not exist.
+
+  ## Examples
+
+      iex> get_api_configuration!(123)
+      %APIConfiguration{}
+
+      iex> get_api_configuration!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_api_configuration!(id), do: Repo.get!(APIConfiguration, id)
+
+  @doc """
+  Creates a api_configuration.
+
+  ## Examples
+
+      iex> create_api_configuration(%{field: value})
+      {:ok, %APIConfiguration{}}
+
+      iex> create_api_configuration(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_api_configuration(attrs \\ %{}) do
+    %APIConfiguration{}
+    |> APIConfiguration.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a api_configuration.
+
+  ## Examples
+
+      iex> update_api_configuration(api_configuration, %{field: new_value})
+      {:ok, %APIConfiguration{}}
+
+      iex> update_api_configuration(api_configuration, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_api_configuration(%APIConfiguration{} = api_configuration, attrs) do
+    api_configuration
+    |> APIConfiguration.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a api_configuration.
+
+  ## Examples
+
+      iex> delete_api_configuration(api_configuration)
+      {:ok, %APIConfiguration{}}
+
+      iex> delete_api_configuration(api_configuration)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_api_configuration(%APIConfiguration{} = api_configuration) do
+    Repo.delete(api_configuration)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking api_configuration changes.
+
+  ## Examples
+
+      iex> change_api_configuration(api_configuration)
+      %Ecto.Changeset{data: %APIConfiguration{}}
+
+  """
+  def change_api_configuration(%APIConfiguration{} = api_configuration, attrs \\ %{}) do
+    APIConfiguration.changeset(api_configuration, attrs)
+  end
 end
