@@ -356,4 +356,66 @@ defmodule Fastsms.MessagingTest do
       assert %Ecto.Changeset{} = Messaging.change_contact_live(contact_live)
     end
   end
+
+  describe "contacts" do
+    alias Fastsms.Messaging.Contact
+
+    import Fastsms.MessagingFixtures
+
+    @invalid_attrs %{address: nil, first_name: nil, last_name: nil, phone_number: nil, email: nil}
+
+    test "list_contacts/0 returns all contacts" do
+      contact = contact_fixture()
+      assert Messaging.list_contacts() == [contact]
+    end
+
+    test "get_contact!/1 returns the contact with given id" do
+      contact = contact_fixture()
+      assert Messaging.get_contact!(contact.id) == contact
+    end
+
+    test "create_contact/1 with valid data creates a contact" do
+      valid_attrs = %{address: "some address", first_name: "some first_name", last_name: "some last_name", phone_number: "some phone_number", email: "some email"}
+
+      assert {:ok, %Contact{} = contact} = Messaging.create_contact(valid_attrs)
+      assert contact.address == "some address"
+      assert contact.first_name == "some first_name"
+      assert contact.last_name == "some last_name"
+      assert contact.phone_number == "some phone_number"
+      assert contact.email == "some email"
+    end
+
+    test "create_contact/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Messaging.create_contact(@invalid_attrs)
+    end
+
+    test "update_contact/2 with valid data updates the contact" do
+      contact = contact_fixture()
+      update_attrs = %{address: "some updated address", first_name: "some updated first_name", last_name: "some updated last_name", phone_number: "some updated phone_number", email: "some updated email"}
+
+      assert {:ok, %Contact{} = contact} = Messaging.update_contact(contact, update_attrs)
+      assert contact.address == "some updated address"
+      assert contact.first_name == "some updated first_name"
+      assert contact.last_name == "some updated last_name"
+      assert contact.phone_number == "some updated phone_number"
+      assert contact.email == "some updated email"
+    end
+
+    test "update_contact/2 with invalid data returns error changeset" do
+      contact = contact_fixture()
+      assert {:error, %Ecto.Changeset{}} = Messaging.update_contact(contact, @invalid_attrs)
+      assert contact == Messaging.get_contact!(contact.id)
+    end
+
+    test "delete_contact/1 deletes the contact" do
+      contact = contact_fixture()
+      assert {:ok, %Contact{}} = Messaging.delete_contact(contact)
+      assert_raise Ecto.NoResultsError, fn -> Messaging.get_contact!(contact.id) end
+    end
+
+    test "change_contact/1 returns a contact changeset" do
+      contact = contact_fixture()
+      assert %Ecto.Changeset{} = Messaging.change_contact(contact)
+    end
+  end
 end

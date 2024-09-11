@@ -12,6 +12,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.elixir_ls" />
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/_build" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/bandit" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/castore" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/db_connection" />
