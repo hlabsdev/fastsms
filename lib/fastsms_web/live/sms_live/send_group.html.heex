@@ -1,0 +1,15 @@
+<div>
+  <.header>
+    Envoyer un SMS groupé au groupe <%= @group.name %>
+  </.header>
+
+  <.simple_form
+    for={@form}
+    phx-submit="send_sms_group"
+  >
+    <.input field={@form[:message]} type="textarea" label="Message" />
+    <:actions>
+      <.button phx-disable-with="Sending...">Envoyer SMS Groupé</.button>
+    </:actions>
+  </.simple_form>
+</div>

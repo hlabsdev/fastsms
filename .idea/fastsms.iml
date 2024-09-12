@@ -151,5 +151,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="httpoison" level="project" />
+    <orderEntry type="library" name="httparrot" level="project" />
   </component>
 </module>

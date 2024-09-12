@@ -17,14 +17,15 @@
     <div class="sr-only">
       <.link navigate={~p"/groups/#{group}"}>Show</.link>
     </div>
-    <.link patch={~p"/groups/#{group}/edit"}>Edit</.link>
+    <.link patch={~p"/groups/#{group}/edit"}><.button>Edit</.button></.link>
+    <.link patch={~p"/sms/send_group/#{group}"}><.button>Sms</.button></.link>
   </:action>
   <:action :let={{id, group}}>
     <.link
       phx-click={JS.push("delete", value: %{id: group.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
-      Delete
+      <.button>Delete</.button>
     </.link>
   </:action>
 </.table>

@@ -5,7 +5,7 @@ defmodule Fastsms.Messaging do
 
   import Ecto.Query, warn: false
   alias Fastsms.Repo
-
+  alias Fastsms.Messaging.SMSAPI
   alias Fastsms.Messaging.Contact
 
   @doc """
@@ -669,4 +669,20 @@ defmodule Fastsms.Messaging do
   def change_group_contact(%GroupContact{} = group_contact, attrs \\ %{}) do
     GroupContact.changeset(group_contact, attrs)
   end
+
+  def send_sms(contact, message) do
+    case SMSAPI.send_sms(contact.phone_number, message) do
+      {:ok, _response} ->
+        # Sauvegarder dans la base de données
+        %SMS{}
+        |> SMS.changeset(%{contact_id: contact.id, message: message, sent_at: DateTime.utc_now(), status: "success"})
+        |> Repo.insert()
+        :ok
+
+      {:error, _reason} ->
+        # Gestion d'erreur
+        :error
+    end
+  end
+
 end

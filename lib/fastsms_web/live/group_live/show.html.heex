@@ -5,6 +5,12 @@
     <.link patch={~p"/groups/#{@group}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit group</.button>
     </.link>
+
+    <%= if length(@group.contacts) > 0 do %>
+        <.link patch={~p"/sms/send_group/#{@group}"} phx-click={JS.push_focus()}>
+           <.button>Sms groupé</.button>
+        </.link>
+    <% end %>
   </:actions>
 </.header>
 

@@ -1,0 +1,18 @@
+<div>
+  <.header>
+    Envoyer un SMS à <%= @contact.first_name %> <%= @contact.last_name %>
+  </.header>
+
+  <.simple_form
+    for={@form}
+    id="sms-send-form"
+    phx-change="validate"
+    phx-submit="send_sms"
+  >
+    <.input field={@form[:message]} type="textarea" label="Message" />
+    <.input field={@form[:dynamic_fields]} type="hidden" />
+    <:actions>
+      <.button phx-disable-with="Sending...">Envoyer SMS</.button>
+    </:actions>
+  </.simple_form>
+</div>

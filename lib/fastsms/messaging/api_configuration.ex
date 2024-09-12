@@ -6,6 +6,7 @@ defmodule Fastsms.Messaging.APIConfiguration do
     field :default, :boolean, default: false
     field :api_key, :string
     field :api_name, :string
+    field :api_url, :string
 
     timestamps(type: :utc_datetime)
   end

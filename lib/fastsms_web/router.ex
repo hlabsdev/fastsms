@@ -32,6 +32,12 @@ defmodule FastsmsWeb.Router do
     live "/groups/:id/edit", GroupLive.Index, :edit
     live "/groups/:id", GroupLive.Show, :show
     live "/groups/:id/show/edit", GroupLive.Show, :edit
+
+    # Envoi et gestion des sms
+    live "/sms/send/:contact_id", SmsLive.Send, :send
+    live "/sms/send_group/:group_id", SmsLive.SendGroup, :send_group
+
+
   end
 
   # Other scopes may use custom stacks.
